@@ -533,6 +533,45 @@ async function runComponentUpdateMode(cwd: string, shouldUpdate: boolean) {
 async function main() {
   const args = process.argv.slice(2);
 
+  // --version / -v
+  if (args.includes("--version") || args.includes("-v")) {
+    const pkgPath = join(import.meta.dir, "..", "package.json");
+    try {
+      const pkg = JSON.parse(readFileSync(pkgPath, "utf-8")) as { version?: string };
+      console.log(pkg.version ?? "unknown");
+    } catch {
+      console.log("unknown");
+    }
+    process.exit(0);
+  }
+
+  // --help / -h
+  if (args.includes("--help") || args.includes("-h")) {
+    console.log(`
+${chalk.bgCyan.black(" UIX ")} – UI component installer
+
+${chalk.bold("Usage:")}
+  uix                                        Interactive mode
+  uix <url|alias> [options]                   Install from registry
+  uix init --name=<name> --dir=<dir> [url]    Initialize a new package
+  uix init shadcn [--all]                     Initialize with shadcn
+  uix list                                    List available registries
+  uix retry                                   Retry failed installations
+  uix outdated                                Check for component updates
+  uix update                                  Update outdated components
+
+${chalk.bold("Options:")}
+  --cwd=<dir>     Set working directory
+  --dry           Dry run (show URLs only)
+  --no-diff       Skip diff checking
+  --shadcn        Use native shadcn add
+  --all           Install all components
+  -v, --version   Show version number
+  -h, --help      Show this help message
+`);
+    process.exit(0);
+  }
+
   const retry = args.includes("retry");
   const dry = args.includes("--dry");
   const noDiff = args.includes("--no-diff");
