@@ -1,6 +1,6 @@
 {
   "name": "uix-cli",
-  "version": "2026.04.14.0",
+  "version": "2026.04.14.1",
   "type": "module",
   "bin": {
     "uix": "./src/cli.ts"
